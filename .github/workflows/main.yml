@@ -1,3 +1,4 @@
+
 name: Build Frame Window Counter
 
 on:
@@ -10,6 +11,15 @@ jobs:
       - name: Download source
         uses: actions/checkout@v4
 
-      - name: Build
-        run: |
-          echo "Preparando compilación..."
+      - name: Build Android mod
+        id: build
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          target: Android64
+
+      - name: Upload mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: Frame-Window-Counter
+          path: ${{ steps.build.outputs.build-output }}/*.geode
+          if-no-files-found: error
