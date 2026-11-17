@@ -1,5 +1,5 @@
 
-name: Build Frame Window Counter
+name: Frame Counter
 
 on:
   workflow_dispatch:
@@ -7,19 +7,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Download source
         uses: actions/checkout@v4
 
-      - name: Build Android mod
-        id: build
+      - name: Setup Geode SDK
         uses: geode-sdk/build-geode-mod@main
-        with:
-          target: Android64
+
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
 
       - name: Upload mod
         uses: actions/upload-artifact@v4
         with:
-          name: Frame-Window-Counter
-          path: ${{ steps.build.outputs.build-output }}/*.geode
-          if-no-files-found: error
+          name: FrameCounter
+          path: build/**/*.geode
