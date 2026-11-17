@@ -1,0 +1,31 @@
+
+#include <Geode/Geode.hpp>
+#include <Geode/modify/PlayLayer.hpp>
+
+using namespace geode::prelude;
+
+class $modify(FrameWindowCounter, PlayLayer) {
+    int m_frameCount = 0;
+    int m_attemptFrames = 0;
+
+    bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
+        if (!PlayLayer::init(level, useReplay, dontCreateObjects))
+            return false;
+
+        m_frameCount = 0;
+        m_attemptFrames = 0;
+        return true;
+    }
+
+    void postUpdate(float dt) {
+        PlayLayer::postUpdate(dt);
+        ++m_frameCount;
+        ++m_attemptFrames;
+    }
+
+    void resetLevel() {
+        PlayLayer::resetLevel();
+        m_frameCount = 0;
+        m_attemptFrames = 0;
+    }
+};
